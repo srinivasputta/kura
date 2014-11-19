@@ -105,6 +105,11 @@ public class CommConnectionImpl implements CommConnection
 	}
 
 	@Override
+	public void setCommURI(CommURI URI) {
+		//No need to set CommURI for the default implementation.
+	}
+
+	@Override
 	public DataInputStream openDataInputStream() throws IOException {	
 		return new DataInputStream(openInputStream());
 	}

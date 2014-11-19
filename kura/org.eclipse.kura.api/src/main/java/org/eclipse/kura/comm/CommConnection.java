@@ -121,6 +121,14 @@ public interface CommConnection extends StreamConnection
 	public CommURI getURI();
 	
 	/**
+	 * Sets the URI for this connection.
+	 * 
+	 * @param CommURI		the URI for this connection
+	 * @throws KuraException
+	 */
+	public void setCommURI(CommURI URI) throws KuraException;
+
+	/**
 	 * Sends and array of bytes to a CommConnection
 	 * 
 	 * @param message		the array of bytes to send to the CommConnection

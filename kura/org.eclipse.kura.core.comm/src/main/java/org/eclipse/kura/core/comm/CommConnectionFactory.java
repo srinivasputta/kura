@@ -15,14 +15,23 @@ import java.io.IOException;
 
 import javax.microedition.io.Connection;
 
+import org.eclipse.kura.comm.CommConnection;
 import org.eclipse.kura.comm.CommURI;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.io.ConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommConnectionFactory implements ConnectionFactory 
 {
+	private static final Logger s_logger = LoggerFactory.getLogger(CommConnectionFactory.class);
+
 	@SuppressWarnings("unused")
 	private ComponentContext      m_ctx;
+	
+	private static CommConnection cached = null;
 
 	// ----------------------------------------------------------------
 	//
@@ -54,12 +63,34 @@ public class CommConnectionFactory implements ConnectionFactory
 	public Connection createConnection(String name, int mode, boolean timeouts)
 		throws IOException
 	{
-		try {
-			CommURI uri = CommURI.parseString(name);
-			return new CommConnectionImpl(uri, mode, timeouts);
+		if (cached == null) {
+			try {
+				CommURI uri = CommURI.parseString(name);
+				s_logger.info("Retrieving communication service...");
+				BundleContext bc = m_ctx.getBundleContext();
+				ServiceReference<?> sr = bc
+						.getServiceReference(CommConnection.class);
+				if (sr != null) {
+					
+					s_logger.info("Registered CommConnection Service ({})found. Instantiating...", sr.toString());
+					
+					cached = (CommConnection) bc.getService(sr);
+					cached.setCommURI(uri);
+
+				} else {
+					try {
+						s_logger.info("No registered CommConnection Service found. Falling back to default...");
+
+						cached = new CommConnectionImpl(uri, mode, timeouts);
+					} catch (Throwable t) {
+						throw new IOException(t);
+					}
+				}
+			} catch (Throwable ex) {
+				throw new IOException(ex);
+			}
+
 		}
-		catch (Throwable t) {
-			throw new IOException(t);
-		}
+		return cached;
 	}
 }
