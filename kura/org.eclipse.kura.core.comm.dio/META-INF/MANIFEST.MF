@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Device I/O Serial Communication Service
+Bundle-SymbolicName: org.eclipse.kura.core.comm.dio
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: javax.comm;version="1.2.0",
+ javax.microedition.io,
+ jdk.dio;version="1.0.0",
+ jdk.dio.uart;version="1.0.0",
+ org.eclipse.kura;version="[1.0,2.0)",
+ org.eclipse.kura.comm;version="[1.1,1.2)",
+ org.osgi.service.component;version="1.2.0",
+ org.slf4j;version="1.6.4"
+Service-Component: OSGI-INF/dioconnection.xml

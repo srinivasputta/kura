@@ -119,6 +119,8 @@
             <entry key="kura"
                    value="file:${kura.install.dir}/kura/kura/packages/${build.output.name}.dp" />
         </propertyfile>
+		<available file="${project.build.directory}/plugins/org.eclipse.kura.core.comm.dio_${org.eclipse.kura.core.comm.dio.version}.jar" property="dio.jar.present" />
+		<antcall target="dio-config" />
 		<available file="${project.build.directory}/plugins/org.eclipse.kura.web_${org.eclipse.kura.web.version}.jar" property="web.jar.present" />
 		<antcall target="web-config" />
 	<!-- Create the Kura start scripts -->
@@ -387,6 +389,7 @@ echo $KURA_PID > /var/run/kura.pid
             <zipfileset file="${project.build.directory}/plugins/org.eclipse.kura.net.admin_${org.eclipse.kura.net.admin.version}.jar"
                         prefix="${build.output.name}/kura/plugins" />
         </zip>
+    	<antcall target="dio-jar" />
 		<antcall target="web-jar" />
         <echo message="Building Kura Distribution for ${build.name}-jars..." />
         
@@ -477,7 +480,12 @@ Resource-Processor: org.eclipse.kura.deployment.customizer.upgrade.rp.UpgradeScr
                 basedir="${project.build.directory}/${build.output.name}/dp_upgrade_stage" />	
     </target>
 
-	
+	<target name="dio-config" if="dio.jar.present">
+			<propertyfile file="${project.build.directory}/${build.output.name}/config.ini">
+	            	<entry key="osgi.bundles" operation="+"
+	                   value=", reference:file:${kura.install.dir}/kura/kura/plugins/org.eclipse.kura.core.comm.dio_${org.eclipse.kura.core.comm.dio.version}.jar@4:start" />
+	        </propertyfile>
+	</target>	
 	
 	<target name="web-config" if="web.jar.present">
 		<propertyfile file="${project.build.directory}/${build.output.name}/config.ini">
@@ -486,6 +494,13 @@ Resource-Processor: org.eclipse.kura.deployment.customizer.upgrade.rp.UpgradeScr
         </propertyfile>
 	</target>
 
+	<target name="dio-jar" if="dio.jar.present">
+			<zip destfile="${project.build.directory}/${build.output.name}.zip" update="true">
+				<zipfileset file="${project.build.directory}/plugins/org.eclipse.kura.core.comm.dio_${org.eclipse.kura.core.comm.dio.version}.jar"
+	                        prefix="${build.output.name}/kura/plugins" />
+			</zip>
+	</target>
+	
 	<target name="web-jar" if="web.jar.present">
 		<zip destfile="${project.build.directory}/${build.output.name}.zip" update="true">
 			<zipfileset file="${project.build.directory}/plugins/org.eclipse.kura.web_${org.eclipse.kura.web.version}.jar"

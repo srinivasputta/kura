@@ -173,6 +173,25 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>get-dio-bundle</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<skip>${org.eclipse.kura.dio.skip}</skip>	
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.eclipse.kura</groupId>
+									<artifactId>org.eclipse.kura.core.comm.dio</artifactId>
+									<version>${org.eclipse.kura.core.comm.dio.version}</version>
+								</artifactItem>
+							</artifactItems>
+							<stripVersion>true</stripVersion>
+							<outputDirectory>${project.basedir}/target/plugins</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
 						<id>get-web-bundle</id>
 						<phase>generate-resources</phase>
 						<goals>
@@ -225,6 +244,7 @@
 							    <move file="target/plugins/org.eclipse.kura.linux.watchdog.jar" tofile="target/plugins/org.eclipse.kura.linux.watchdog_${org.eclipse.kura.linux.watchdog.version}.jar"/>
 							    <move file="target/plugins/org.eclipse.kura.net.admin.jar" tofile="target/plugins/org.eclipse.kura.net.admin_${org.eclipse.kura.net.admin.version}.jar"/>
 							    <move file="target/plugins/org.eclipse.kura.protocol.modbus.jar" tofile="target/plugins/org.eclipse.kura.protocol.modbus_${org.eclipse.kura.protocol.modbus.version}.jar"/>
+							    <move file="target/plugins/org.eclipse.kura.core.comm.dio.jar" tofile="target/plugins/org.eclipse.kura.core.comm.dio_${org.eclipse.kura.core.comm.dio.version}.jar" failonerror="false" />
 							    <move file="target/plugins/org.eclipse.kura.web.jar" tofile="target/plugins/org.eclipse.kura.web_${org.eclipse.kura.web.version}.jar" failonerror="false" />
 							</tasks>
 						</configuration>

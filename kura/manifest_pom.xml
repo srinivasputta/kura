@@ -108,6 +108,15 @@
 				<module>org.eclipse.kura.protocol.can.test</module>
 			</modules>
 		</profile>
+      <profile>
+			<id>dio</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>org.eclipse.kura.core.comm.dio</module>
+			</modules>
+		</profile>
 	</profiles>
 
 	<repositories>
