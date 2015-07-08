@@ -1,0 +1,12 @@
+[Unit]
+Description=Kura
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/kura.pid
+ExecStart=${INSTALL_DIR}/kura/bin/start_kura_background.sh start
+
+[Install]
+WantedBy=multi-user.target
+
